@@ -1,0 +1,48 @@
+spring:
+  application:
+    name: PaymentServiceDemo
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/paymentService
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver 
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-2d8txn41w8quqhi6.us.auth0.com/
+      client:
+        registration:
+          internal-client:
+            provider: okta
+            authorization-grant-type: client_credentials
+            scope: internal
+            client-id: peW6OFHBYfVcaid1ARPaNQPiItNdJnbm
+            client-secret: PAG4jkvfqOe3uDNMIIEEDAW2IOYyoUohhYParNZaGFwHtlHBauIcp65gotWVq_42
+        provider:
+          okta:
+            issuer-uri: https://dev-2d8txn41w8quqhi6.us.auth0.com/
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+
+server:
+  port: 9094
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9095/eureka
+    register-with-eureka: true
+    fetch-registry: true
