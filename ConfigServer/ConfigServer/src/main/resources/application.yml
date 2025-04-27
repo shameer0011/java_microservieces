@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: ConfigServer
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/shameer0011/config_server_java_springboot.git  # Using HTTPS to fetch config from GitHub
+          ignore-ssl-errors: true 
+          #clone-on-start: true  # Clone the repository on startup
+
+server:
+  port: 9094  # Config Server runs on port 9094
+
+eureka:
+  instance:
+    prefer-ip-address: true  # Use IP address for Eureka instance registration
+  client:
+    service-url:
+      defaultZone: http://localhost:9095/eureka  # Eureka server URL
+    register-with-eureka: true  # Registers the ConfigServer with Eureka
+    fetch-registry: true  # Fetches the registry from Eureka for service discovery

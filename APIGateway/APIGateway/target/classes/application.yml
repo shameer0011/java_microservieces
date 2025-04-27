@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: APIGateway  # Gateway service name
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://OrderDemo  
+          predicates:
+            - Path=/api/orders/**  
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: OrderDemo
+                fallbackUri: forward:/fallback/order
+
+        - id: product-service
+          uri: lb://ProductDemo  
+          predicates:
+            - Path=/api/product/**  
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: ProductDemo
+                fallbackUri: forward:/fallback/product
+
+        - id: payment-service
+          uri: lb://PaymentServiceDemo  
+          predicates:
+            - Path=/payment/**  
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: PaymentServiceDemo
+                fallbackUri: forward:/fallback/payment
+
+server:
+  port: 9096  # API Gateway runs on port 9096
+
+eureka:
+  instance:
+    prefer-ip-address: true  
+  client:
+    service-url:
+      defaultZone: http://localhost:9095/eureka/  # Eureka server URL
+    register-with-eureka: true
+    fetch-registry: true
+
+okta:
+  oauth2:
+    issuer: https://dev-2d8txn41w8quqhi6.us.auth0.com/
+    client-id: peW6OFHBYfVcaid1ARPaNQPiItNdJnbm
+    client-secret: PAG4jkvfqOe3uDNMIIEEDAW2IOYyoUohhYParNZaGFwHtlHBauIcp65gotWVq_42
+    scopes:
+      - openid
+      - profile
+      - email
+      - offline_access
+    audience: https://dev-2d8txn41w8quqhi6.us.auth0.com/api/v2/
+
